@@ -4,9 +4,10 @@ Bot para telegram
 '''
 from cgitb import text
 import random
+from turtle import update
 from telegram import *
 from telegram.ext import *
-# from requests import *
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton # Necesario para botones
 
 # [Opcional] Recomendable poner un log con los errores que apareceran por pantalla.
 import logging
@@ -20,17 +21,35 @@ def start(update, context):
 	# Enviar un mensaje a un ID determinado.
 	context.bot.send_message(update.message.chat_id, "Bienvenido", parse_mode=ParseMode.HTML)
 
-	# Podemos llamar a otros comandos, sin que se haya activado en el chat (/help).
-	# rick(update, context)
-def rick(update, context):
+	Button1 = InlineKeyboardButton (
+    	text = 'CARAVANA',
+		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	)
+	Button2 = InlineKeyboardButton (
+		text = 'Top Mundial',
+		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	)
+	Button3 = InlineKeyboardButton (
+		text = 'Hits del momento',
+		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	)
 
+	update.message.reply_text (
+		text = 'Elije la lista....',
+		reply_markup=InlineKeyboardMarkup([
+		[Button1, Button2, Button3]
+
+		])
+	)
+
+	
+def rick(update, context):
 	cid=update.message.chat_id
 	msg="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 	# Responde directametne en el canal donde se le ha hablado.
 	update.message.reply_text(msg)
 
 def dice(update, context):
-
 	context.bot.send_message(update.message.chat_id, random.randint(1,6), parse_mode=ParseMode.HTML)
 
 def main():
@@ -54,5 +73,6 @@ if __name__ == '__main__':
 	print(('[Nombre del bot] Start...'))
 	main()
 
-KeyboardButton 
+
+
 
