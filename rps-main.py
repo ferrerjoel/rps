@@ -2,6 +2,8 @@
 '''
 Bot para telegram
 '''
+from datetime import datetime
+import json
 from cgitb import text
 import random
 from turtle import update
@@ -21,33 +23,62 @@ def start(update, context):
 	# Enviar un mensaje a un ID determinado.
 	context.bot.send_message(update.message.chat_id, "Bienvenido", parse_mode=ParseMode.HTML)
 
-	Button1 = InlineKeyboardButton (
-    	text = 'CARAVANA',
-		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	context.bot.send_message(update.message.chat_id,update.message.from_user.id)
+
+	writeUserData(update.message.from_user.id, update.message.from_user.username, update.message.from_user.first_name, update.message.from_user.last_name)
+
+	Button1 = KeyboardButton (
+    	text = '/startFriendly'
 	)
-	Button2 = InlineKeyboardButton (
-		text = 'Top Mundial',
-		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	Button2 = KeyboardButton (
+		text = '/startCompetitive'
 	)
-	Button3 = InlineKeyboardButton (
-		text = 'Hits del momento',
-		url='https://www.youtube.com/watch?v=Q4sMnvX0D84'
+	Button3 = KeyboardButton (
+		text = '/changeMessage'
+	)
+	Button4 = KeyboardButton (
+		text = '/seePoints'
 	)
 
 	update.message.reply_text (
-		text = 'Elije la lista....',
-		reply_markup=InlineKeyboardMarkup([
-		[Button1, Button2, Button3]
+		text = 'Welcome! What do you want to do?',
+		reply_markup=ReplyKeyboardMarkup([
+		[Button1, Button2], [Button3, Button4]
 
 		])
 	)
 
-	
-def rick(update, context):
-	cid=update.message.chat_id
-	msg="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-	# Responde directametne en el canal donde se le ha hablado.
-	update.message.reply_text(msg)
+def writeUserData (userID, userName, firstName, lastName):
+	newUserID = {"userID" : userID, "userName" : userName, "firstName" : firstName, "lastName" : lastName, "dateCreation" : str(datetime.now())}
+	with open("users.json", "r+") as data:
+		fileData = json.load(data)
+
+		if not any(userDetails['userID']==userID for userDetails in fileData['userDetails']):
+			fileData["userDetails"].append(newUserID)
+			data.seek(0)
+			json.dump(fileData, data, indent=4)
+
+def getRandomUserID (currentUserID):
+	with open("users.json", "r+") as data:
+		fileData = json.load(data)
+		userDetails = fileData['userDetails']
+		opponentID = random.choice(userDetails)
+		return opponentID['userID']
+
+def startFriendly(update, context):
+	userID = update.message.from_user.id
+	with open("games.json", "r+") as data:
+		fileData = json.load(data)
+		opponentID = getRandomUserID(userID)
+		if not any(userDetails['userID']== opponentID for userDetails in fileData['currentGames']):
+			print("Searching an opponent...")
+			context.bot.send_message(opponentID,"You are the chosen one")
+
+			'''fileData["currentGames"].append(newUserID)
+			data.seek(0)
+			json.dump(fileData, data, indent=4)'''
+		else:
+			print("Game already exists")
 
 def dice(update, context):
 	context.bot.send_message(update.message.chat_id, random.randint(1,6), parse_mode=ParseMode.HTML)
@@ -60,8 +91,7 @@ def main():
 	# Eventos que activarán nuestro bot.
 	# /comandos
 	dp.add_handler(CommandHandler('start',	start))
-	dp.add_handler(CommandHandler('rick',	rick))
-	dp.add_handler(CommandHandler('dice',	dice))
+	dp.add_handler(CommandHandler('startFriendly',	startFriendly))
 
 	dp.add_error_handler(error_callback)
     # Comienza el bot
