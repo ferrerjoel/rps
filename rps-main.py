@@ -49,7 +49,7 @@ def start(update, context):
 	)
 
 def writeUserData (userID, userName, firstName, lastName):
-	newUserID = {"userID" : userID, "userName" : userName, "firstName" : firstName, "lastName" : lastName, "dateCreation" : str(datetime.now())}
+	newUserID = {"userID" : userID, "userName" : userName, "firstName" : firstName, "lastName" : lastName, "dateCreation" : str(datetime.now()), "inGame" : False}
 	with open("users.json", "r+") as data:
 		fileData = json.load(data)
 
@@ -58,27 +58,34 @@ def writeUserData (userID, userName, firstName, lastName):
 			data.seek(0)
 			json.dump(fileData, data, indent=4)
 
-def getRandomUserID (currentUserID):
+def getRandomFreeUserObject (currentUserID): #Can break if there aren't any players aviable
 	with open("users.json", "r+") as data:
 		fileData = json.load(data)
 		userDetails = fileData['userDetails']
-		opponentID = random.choice(userDetails)
-		return opponentID['userID']
+		userDetails = [x for x in userDetails if x['inGame'] == False]
+		if len(userDetails) >= 2:
+			print(userDetails)
+			opponentID = currentUserID
+			while opponentID == currentUserID:
+				opponentID = random.choice(userDetails)['userID']
+			return opponentID
+		return None
+		
 
 def startFriendly(update, context):
 	userID = update.message.from_user.id
 	with open("games.json", "r+") as data:
 		fileData = json.load(data)
-		opponentID = getRandomUserID(userID)
-		if not any(userDetails['userID']== opponentID for userDetails in fileData['currentGames']):
-			print("Searching an opponent...")
-			context.bot.send_message(opponentID,"You are the chosen one")
-
-			'''fileData["currentGames"].append(newUserID)
-			data.seek(0)
-			json.dump(fileData, data, indent=4)'''
+		opponentID = getRandomFreeUserObject(userID)
+		if opponentID != None:
+			if not any(userDetails['userID']== opponentID for userDetails in fileData['currentGames']):
+				print("Searching an opponent...")
+				#context.bot.send_message(opponentID,"You are the chosen one")
+				print(opponentID)
+			else:
+				print("Game already exists")
 		else:
-			print("Game already exists")
+			print("No available players right now")
 
 def dice(update, context):
 	context.bot.send_message(update.message.chat_id, random.randint(1,6), parse_mode=ParseMode.HTML)
