@@ -1,52 +1,52 @@
 {
-    "userDetails": [
-        {
-            "userID": 1045336649,
-            "userName": "Jqnzo",
-            "firstName": "Janzo",
-            "lastName": "Perez",
-            "dateCreation": "2022-09-26 17:42:31.703592",
-            "inGame" : true
-        },
-        {
-            "userID": 5542382049,
-            "userName": "polrp95",
-            "firstName": "Pol",
-            "lastName": "Renalias",
-            "dateCreation": "2022-09-26 17:43:52.651219",
-            "inGame" : true
-        },
-        {
-            "userID": 5238397723,
-            "userName": null,
-            "firstName": "Laura",
-            "lastName": null,
-            "dateCreation": "2022-09-26 17:45:16.281741",
-            "inGame" : false
-        },
-        {
-            "userID": 5760035287,
-            "userName": "rguinart",
-            "firstName": "Roger",
-            "lastName": null,
-            "dateCreation": "2022-09-26 17:46:41.570475",
-            "inGame" : true
-        },
-        {
-            "userID": 216417856,
-            "userName": null,
-            "firstName": "Joel",
-            "lastName": "Ferrer",
-            "dateCreation": "2022-09-26 17:55:19.725778",
-            "inGame" : false
-        },
-        {
-            "userID": 1983080655,
-            "userName": "Drumpalo",
-            "firstName": "Eduardo",
-            "lastName": "As",
-            "dateCreation": "2022-09-26 18:30:22.715044",
-            "inGame" : true
-        }
-    ]
+      "userDetails": [
+          {
+              "userID": 1045336649,
+              "userName": "Jqnzo",
+              "firstName": "Janzo",
+              "lastName": "Perez",
+              "dateCreation": "2022-09-26 17:42:31.703592",
+              "inGame" : true
+          },
+          {
+              "userID": 5542382049,
+              "userName": "polrp95",
+              "firstName": "Pol",
+              "lastName": "Renalias",
+              "dateCreation": "2022-09-26 17:43:52.651219",
+              "inGame" : true
+          },
+          {
+              "userID": 5238397723,
+              "userName": null,
+              "firstName": "Laura",
+              "lastName": null,
+              "dateCreation": "2022-09-26 17:45:16.281741",
+              "inGame" : false
+          },
+          {
+              "userID": 5760035287,
+              "userName": "rguinart",
+              "firstName": "Roger",
+              "lastName": null,
+              "dateCreation": "2022-09-26 17:46:41.570475",
+              "inGame" : true
+          },
+          {
+              "userID": 216417856,
+              "userName": null,
+              "firstName": "Joel",
+              "lastName": "Ferrer",
+              "dateCreation": "2022-09-26 17:55:19.725778",
+              "inGame" : false
+          },
+          {
+              "userID": 1983080655,
+              "userName": "Drumpalo",
+              "firstName": "Eduardo",
+              "lastName": "As",
+              "dateCreation": "2022-09-26 18:30:22.715044",
+              "inGame" : true
+          }
+      ]
 }

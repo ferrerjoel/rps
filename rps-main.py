@@ -21,7 +21,7 @@ def error_callback(update, context):
 def start(update, context):
 	''' START '''
 	# Enviar un mensaje a un ID determinado.
-	context.bot.send_message(update.message.chat_id, "Bienvenido", parse_mode=ParseMode.HTML)
+	context.bot.send_message(update.message.chat_id, 'Bienvenido', parse_mode=ParseMode.HTML)
 
 	context.bot.send_message(update.message.chat_id,update.message.from_user.id)
 
@@ -49,17 +49,17 @@ def start(update, context):
 	)
 
 def writeUserData (userID, userName, firstName, lastName):
-	newUserID = {"userID" : userID, "userName" : userName, "firstName" : firstName, "lastName" : lastName, "dateCreation" : str(datetime.now()), "inGame" : False}
-	with open("users.json", "r+") as data:
+	newUserID = {'userID' : userID, 'userName' : userName, 'firstName' : firstName, 'lastName' : lastName, 'dateCreation' : str(datetime.now()), 'inGame' : False}
+	with open('users.json', 'r+') as data:
 		fileData = json.load(data)
 
 		if not any(userDetails['userID']==userID for userDetails in fileData['userDetails']):
-			fileData["userDetails"].append(newUserID)
+			fileData['userDetails'].append(newUserID)
 			data.seek(0)
 			json.dump(fileData, data, indent=4)
 
 def getRandomFreeUserObject (currentUserID): #Can break if there aren't any players aviable
-	with open("users.json", "r+") as data:
+	with open('users.json', 'r+') as data:
 		fileData = json.load(data)
 		userDetails = fileData['userDetails']
 		userDetails = [x for x in userDetails if x['inGame'] == False]
@@ -74,24 +74,37 @@ def getRandomFreeUserObject (currentUserID): #Can break if there aren't any play
 
 def startFriendly(update, context):
 	userID = update.message.from_user.id
-	with open("games.json", "r+") as data:
+	with open('games.json', 'r+') as data:
 		fileData = json.load(data)
 		opponentID = getRandomFreeUserObject(userID)
 		if opponentID != None:
-			if not any(userDetails['userID']== opponentID for userDetails in fileData['currentGames']):
-				print("Searching an opponent...")
-				#context.bot.send_message(opponentID,"You are the chosen one")
+			if not any(userDetails['userID']== opponentID for userDetails in fileData['games']):
+				print('Searching an opponent...')
+				#Player turn: 1 = Player 1 / 2 = Player 2 / 3 = Game ended
+				#Winner: 0 = game active / 1 = P1 / 2 = P2
+				newGame = {'player1ID' : userID, 'player2ID' : opponentID, 'gameStarted' : str(datetime.now()), 'playerTurn' : 1, 'winner' : 0 }
+				#We create a game on the database
+				fileData['games'].append(newGame)
+				#context.bot.send_message(opponentID,'You are the chosen one')
+				with open('users.json', 'r+') as data:
+					fileData = json.load(data)
+					#gameUsers = [x for x in fileData['userDetails'] if x['userID'] == userID or opponentID]
+					for x in fileData['userDetails']:
+						if x['userID'] == userID or opponentID:
+							x['inGame'] = True
+				with open('users.json', 'w') as data:
+					json.dump(fileData, data, indent=4)
 				print(opponentID)
 			else:
-				print("Game already exists")
+				print('Game already exists')
 		else:
-			print("No available players right now")
+			print('No available players right now')
 
 def dice(update, context):
 	context.bot.send_message(update.message.chat_id, random.randint(1,6), parse_mode=ParseMode.HTML)
 
 def main():
-	TOKEN="5740883903:AAH369a_yh2OyYg11aTcbnW4AcffOmUW9D0"
+	TOKEN='5740883903:AAH369a_yh2OyYg11aTcbnW4AcffOmUW9D0'
 	updater=Updater(TOKEN, use_context=True)
 	dp=updater.dispatcher
 
