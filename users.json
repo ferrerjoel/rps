@@ -54,6 +54,14 @@
             "firstName": "Isaac",
             "lastName": "Ferrer",
             "dateCreation": "2022-09-29 11:59:10.120102",
+            "inGame": true
+        },
+        {
+            "userID": 1371492547,
+            "userName": null,
+            "firstName": "Josep y Neus",
+            "lastName": null,
+            "dateCreation": "2022-09-29 21:21:19.756350",
             "inGame": false
         }
     ]
