@@ -5,6 +5,7 @@
             "userName": "Jqnzo",
             "firstName": "Janzo",
             "lastName": "Perez",
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:42:31.703592",
             "inGame": true
         },
@@ -13,6 +14,7 @@
             "userName": "polrp95",
             "firstName": "Pol",
             "lastName": "Renalias",
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:43:52.651219",
             "inGame": true
         },
@@ -21,6 +23,7 @@
             "userName": null,
             "firstName": "Laura",
             "lastName": null,
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:45:16.281741",
             "inGame": true
         },
@@ -29,6 +32,7 @@
             "userName": "rguinart",
             "firstName": "Roger",
             "lastName": null,
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:46:41.570475",
             "inGame": true
         },
@@ -37,14 +41,16 @@
             "userName": null,
             "firstName": "Joel",
             "lastName": "Ferrer",
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:55:19.725778",
-            "inGame": false
+            "inGame": true
         },
         {
             "userID": 1983080655,
             "userName": "Drumpalo",
             "firstName": "Eduardo",
             "lastName": "As",
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 18:30:22.715044",
             "inGame": true
         },
@@ -53,6 +59,7 @@
             "userName": "isaacferrer",
             "firstName": "Isaac",
             "lastName": "Ferrer",
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-29 11:59:10.120102",
             "inGame": true
         },
@@ -61,8 +68,18 @@
             "userName": null,
             "firstName": "Josep y Neus",
             "lastName": null,
+            "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-29 21:21:19.756350",
-            "inGame": false
+            "inGame": true
+        },
+        {
+            "userID": 5558355090,
+            "userName": null,
+            "firstName": "Neus",
+            "lastName": "Riera",
+            "message": "Hey there! I'm using RPS Project",
+            "dateCreation": "2022-09-30 12:32:56.351012",
+            "inGame": true
         }
     ]
 }
