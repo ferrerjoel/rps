@@ -7,7 +7,7 @@
             "lastName": "Perez",
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:42:31.703592",
-            "inGame": true
+            "inGame": false
         },
         {
             "userID": 5542382049,

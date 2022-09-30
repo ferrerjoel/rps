@@ -295,8 +295,8 @@ def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1
         context.bot.send_message(player2ID, "It's a draw!", parse_mode=ParseMode.HTML)
 
     if player1Rounds >= NUMBER_ROUNDS_WIN:
-        context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
-        context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player1ID, 'You have won this game!', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player2ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
     elif player2Rounds >= NUMBER_ROUNDS_WIN:
         context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
         context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
@@ -311,9 +311,12 @@ def startMenu(update,context, userID):
     )
 
 def changeMessage(update, context):
-    context.bot.send_message(update.message.chat_id, 'What message do you want?', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
-    print(update.message.message)
-
+    msg = context.bot.send_message(update.message.chat_id, 'What message do you want?', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
+   
+#    context.bot.register_next_step_handler(msg, imprimirmissatge)
+def imprimirmissatge(update, context):
+    if update.message.text != "":
+        print('hola')
 def main():
     TOKEN = '5740883903:AAH369a_yh2OyYg11aTcbnW4AcffOmUW9D0'
     updater = Updater(TOKEN, use_context=True)
@@ -323,12 +326,13 @@ def main():
     # /comandos
     dp.add_handler(CommandHandler('start',    start))
     dp.add_handler(CommandHandler('startFriendly',    startFriendly))
-    #dp.add_handler(CommandHandler('changeMessage',    changeMessage))
+    dp.add_handler(CommandHandler('changeMessage',    changeMessage))
 
     dp.add_handler(CommandHandler('rock',    rock))
     dp.add_handler(CommandHandler('paper',    paper))
     dp.add_handler(CommandHandler('scissors',    scissors))
 
+    dp.add_handler(MessageHandler(Filters.text,imprimirmissatge))
     dp.add_error_handler(error_callback)
     # Comienza el bot
     updater.start_polling()

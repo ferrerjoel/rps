@@ -1,8 +1,15 @@
 {
     "games": [
-
+        {
+            "player1ID": 5238397723,
+            "player2ID": 216417856,
+            "gameStarted": "2022-09-30 18:42:12.151740",
+            "player1Movement": 1,
+            "player2Movement": 0,
+            "player1Rounds": 0,
+            "player2Rounds": 0,
+            "isActive": true
+        }
     ],
-    "endedGames": [
-        
-    ]
+    "endedGames": []
 }
