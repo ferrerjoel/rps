@@ -43,7 +43,7 @@
             "lastName": "Ferrer",
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-26 17:55:19.725778",
-            "inGame": true
+            "inGame": false
         },
         {
             "userID": 1983080655,
@@ -80,6 +80,15 @@
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-30 12:32:56.351012",
             "inGame": true
+        },
+        {
+            "userID": 5013807990,
+            "userName": null,
+            "firstName": "Irina",
+            "lastName": "Povedano Aguilar",
+            "message": "Hey there! I'm using RPS Project",
+            "dateCreation": "2022-09-30 22:07:00.843679",
+            "inGame": false
         }
     ]
 }

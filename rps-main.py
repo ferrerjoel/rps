@@ -80,21 +80,17 @@ def writeUserData(userID, userName, firstName, lastName):
             data.seek(0)
             json.dump(fileData, data, indent=4)
 
-
-# Can break if there aren't any players aviable
 def getRandomFreeUserObject(currentUserID):
     with open('users.json', 'r+') as data:
         fileData = json.load(data)
         userDetails = fileData['userDetails']
         userDetails = [x for x in userDetails if x['inGame'] == False]
         if len(userDetails) >= 2:
-            print(userDetails)
             opponentID = currentUserID
             while opponentID == currentUserID:
                 opponentID = random.choice(userDetails)['userID']
             return opponentID
         return None
-
 
 def startFriendly(update, context):
     userID = update.message.from_user.id
@@ -215,8 +211,6 @@ def resolveRound(update, context):
                 player2ID = x['player2ID']
                 player1Rounds = x['player1Rounds']
                 player2Rounds = x['player2Rounds']
-        print(player1Movement)
-        print(player2Movement)
         with open('games.json', 'w') as data:
             json.dump(fileData, data, indent=4)
         if player1Movement != 0 and player2Movement != 0:
@@ -288,19 +282,21 @@ def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1
         context.bot.send_message(player1ID, 'You have won this round!\nRounds: You ['+str(player1Rounds)+'|'+str(player2Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
         context.bot.send_message(player2ID, 'You have lost this round!\nRounds: You ['+str(player2Rounds)+'|'+str(player1Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
     elif veredict == 2:
-        context.bot.send_message(player2ID, 'You have won this round!\nRounds: You ['+str(player1Rounds)+'|'+str(player2Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
-        context.bot.send_message(player1ID, 'You have lost this round...\nRounds: You ['+str(player2Rounds)+'|'+str(player1Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player2ID, 'You have won this round!\nRounds: You ['+str(player2Rounds)+'|'+str(player1Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player1ID, 'You have lost this round...\nRounds: You ['+str(player1Rounds)+'|'+str(player2Rounds)+'] Opponent', parse_mode=ParseMode.HTML)
     else:
         context.bot.send_message(player1ID, "It's a draw!", parse_mode=ParseMode.HTML)
         context.bot.send_message(player2ID, "It's a draw!", parse_mode=ParseMode.HTML)
 
     if player1Rounds >= NUMBER_ROUNDS_WIN:
-        context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
-        context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player1ID, 'You have won this game!', parse_mode=ParseMode.HTML)
+        context.bot.send_message(player2ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
     elif player2Rounds >= NUMBER_ROUNDS_WIN:
         context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
         context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
-
+    
+    print(player1ID)
+    print(player2ID)
 
 def startMenu(update,context, userID):
         context.bot.sendMessage(userID,
