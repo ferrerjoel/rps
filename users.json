@@ -41,7 +41,7 @@
             "userName": null,
             "firstName": "Joel",
             "lastName": "Ferrer",
-            "message": "Hey there! I'm using RPS Project",
+            "message": "Omae wa mou shindeiru",
             "dateCreation": "2022-09-26 17:55:19.725778",
             "inGame": false
         },
@@ -70,7 +70,7 @@
             "lastName": null,
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-29 21:21:19.756350",
-            "inGame": true
+            "inGame": false
         },
         {
             "userID": 5558355090,
@@ -88,7 +88,7 @@
             "lastName": "Povedano Aguilar",
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-30 22:07:00.843679",
-            "inGame": false
+            "inGame": true
         }
     ]
 }

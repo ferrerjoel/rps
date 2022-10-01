@@ -92,13 +92,24 @@ def getRandomFreeUserObject(currentUserID):
             return opponentID
         return None
 
+def userIsInGame(userID):
+    with open('users.json', 'r+') as data:
+        fileData = json.load(data)
+        userDetails = fileData['userDetails']
+        for x in userDetails:
+            # We set the choosen movement on the json file
+            if x['userID'] == userID:
+                return x['inGame']
+        return False
+
 def startFriendly(update, context):
     userID = update.message.from_user.id
     with open('games.json', 'r+') as data:
         fileData = json.load(data)
         opponentID = getRandomFreeUserObject(userID)
-        if opponentID != None:
-            if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
+        if not userIsInGame:
+            if opponentID != None:
+                #if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
                 print('Searching an opponent...')
                 # Player turn: 1 = Player 1 / 2 = Player 2 / 3 = Game ended
                 # Winner: 0 = game active / 1 = P1 / 2 = P2
@@ -119,10 +130,10 @@ def startFriendly(update, context):
                 print(opponentID)
                 startGame(userID, opponentID, context)
             else:
-                print('Game already exists')
+                print('No available players right now')
+                context.bot.send_message(update.message.chat_id, "There aren't any available players right now :(", parse_mode=ParseMode.HTML)
         else:
-            print('No available players right now')
-            context.bot.send_message(update.message.chat_id, "There aren't any available players right now :(", parse_mode=ParseMode.HTML)
+            context.bot.send_message(update.message.chat_id, "You are already in a game!", parse_mode=ParseMode.HTML)
 
 
 def startGame(userID, opponentID, context):
@@ -150,22 +161,48 @@ def send_movements(userID, context):
                              reply_markup=ReplyKeyboardMarkup([
                                  [ButtonRock, ButtonPaper, ButtonScissors],
                              ], one_time_keyboard=True))
-
+#Movements
 def rock(update, context):
-    context.bot.send_message(
-        update.message.chat_id, 'You have choosen rock! 🪨', parse_mode=ParseMode.HTML)
-    setMove(update, context, 1)
+    # We check if the user has already choosen
+    if not checkPlayerTurn(update, context):
+        context.bot.send_message(
+            update.message.chat_id, 'You have choosen rock! 🪨', parse_mode=ParseMode.HTML)
+        # Sets the move on the JSON file
+        setMove(update, context, 1)
+    else: 
+        context.bot.send_message(
+            update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
 
 def paper(update, context):
-    context.bot.send_message(
-        update.message.chat_id, 'You have choosen paper! 📋', parse_mode=ParseMode.HTML)
-    setMove(update, context, 2)
+    if not checkPlayerTurn(update, context):
+        context.bot.send_message(
+            update.message.chat_id, 'You have choosen paper! 📋', parse_mode=ParseMode.HTML)
+        setMove(update, context, 2)
+    else: 
+        context.bot.send_message(
+            update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
 
 def scissors(update, context):
-    context.bot.send_message(
-        update.message.chat_id, 'You have choosen scissors! ✂️', parse_mode=ParseMode.HTML)
-    setMove(update, context, 3)
-
+    if not checkPlayerTurn(update, context):
+        context.bot.send_message(
+            update.message.chat_id, 'You have choosen scissors! ✂️', parse_mode=ParseMode.HTML)
+        setMove(update, context, 3)
+    else: 
+        context.bot.send_message(
+            update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
+# returns True if the player has already choosen
+def checkPlayerTurn (update, context):
+    chatID = update.message.chat_id
+    with open('games.json', 'r+') as data:
+        fileData = json.load(data)
+        for x in fileData['games']:
+            # We set the choosen movement on the json file
+            if x['player1ID'] == chatID:
+                return x['player1Movement'] != 0
+            if x['player2ID'] == chatID:
+                return x['player2Movement'] != 0
+        return False
+#Recives the user movement and sets the move on the JSON file
 def setMove(update, context, move):
     chatID = update.message.chat_id
     with open('games.json', 'r+') as data:
@@ -195,7 +232,7 @@ def newRound(update, context, winner):
                     x['player2Rounds'] += 1
     with open('games.json', 'w') as data:
         json.dump(fileData, data, indent=4)
-
+# Takes the data of the game, if both players have made movements it chooses the winner
 def resolveRound(update, context):
     with open('games.json', 'r+') as data:
         chatID = update.message.chat_id
@@ -203,7 +240,7 @@ def resolveRound(update, context):
         player1Movement = 0
         player2Movement = 0
         for x in fileData['games']:
-            # We set the choosen movement on the json file
+            # We take the data we need
             if x['player1ID'] == chatID or x['player2ID'] == chatID:
                 player1Movement = x['player1Movement']
                 player1ID = x['player1ID']
@@ -213,6 +250,7 @@ def resolveRound(update, context):
                 player2Rounds = x['player2Rounds']
         with open('games.json', 'w') as data:
             json.dump(fileData, data, indent=4)
+        # Resolves the round: 1 = P1 Winner / 2 = P2 Winner / 3 = Draw
         if player1Movement != 0 and player2Movement != 0:
             if player1Movement == player2Movement+1 or player1Movement == player2Movement-2:
                 veredict = 1
@@ -222,8 +260,10 @@ def resolveRound(update, context):
                 player2Rounds += 1
             else:
                 veredict = 3
+            # We inform the players
             resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1Movement, player2Movement, player1Rounds, player2Rounds)
             newRound(update, context, veredict)
+            # We check if someone has already won
             if player1Rounds >= NUMBER_ROUNDS_WIN or player2Rounds >= NUMBER_ROUNDS_WIN:
                 endGame(update, context, player1ID, player2ID)
                 startMenu(update,context, player1ID)
@@ -238,7 +278,6 @@ def endGame(update,context,player1ID,player2ID):
         for x in fileData['userDetails']:
             if x['userID'] == player1ID or x['userID'] == player2ID:
                 # We set the value 'inGame' false for the 2 players
-                print('uwu')
                 x['inGame'] = False
     with open('users.json', 'w') as data:
         json.dump(fileData, data, indent=4)
@@ -307,10 +346,28 @@ def startMenu(update,context, userID):
     )
 
 def changeMessage(update, context):
+    global setMessage
     context.bot.send_message(update.message.chat_id, 'What message do you want?', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
-    print(update.message.message)
+    setMessage = True
 
+def updateMessage(update, context):
+    global setMessage
+    if (setMessage):
+        message = update.message.text
+        setMessage = False
+        with open('users.json', 'r+') as data:
+            fileData = json.load(data)
+        for x in fileData['userDetails']:
+            if x['userID'] == update.message.chat_id:
+                # We set the value 'inGame' false for the 2 players
+                x['message'] = message
+        with open('users.json', 'w') as data:
+            json.dump(fileData, data, indent=4)
+        context.bot.send_message(update.message.chat_id, 'Message updated succesfully to: "'+ message + '"', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
+    
 def main():
+    global setMessage
+    setMessage = False
     TOKEN = '5740883903:AAH369a_yh2OyYg11aTcbnW4AcffOmUW9D0'
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -319,11 +376,12 @@ def main():
     # /comandos
     dp.add_handler(CommandHandler('start',    start))
     dp.add_handler(CommandHandler('startFriendly',    startFriendly))
-    #dp.add_handler(CommandHandler('changeMessage',    changeMessage))
-
+    dp.add_handler(CommandHandler('changeMessage',    changeMessage))
+    
     dp.add_handler(CommandHandler('rock',    rock))
     dp.add_handler(CommandHandler('paper',    paper))
     dp.add_handler(CommandHandler('scissors',    scissors))
+    dp.add_handler(MessageHandler(Filters.text, updateMessage))
 
     dp.add_error_handler(error_callback)
     # Comienza el bot
