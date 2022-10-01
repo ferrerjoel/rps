@@ -10,10 +10,7 @@ from shutil import move
 from turtle import up, update
 from telegram import *
 from telegram.ext import *
-# Necesario para botones
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
-# [Opcional] Recomendable poner un log con los errores que apareceran por pantalla.
 import logging
 
 NUMBER_ROUNDS_WIN = 3
@@ -107,7 +104,7 @@ def startFriendly(update, context):
     with open('games.json', 'r+') as data:
         fileData = json.load(data)
         opponentID = getRandomFreeUserObject(userID)
-        if not userIsInGame:
+        if userIsInGame:
             if opponentID != None:
                 #if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
                 print('Searching an opponent...')
@@ -333,9 +330,6 @@ def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1
     elif player2Rounds >= NUMBER_ROUNDS_WIN:
         context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
         context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
-    
-    print(player1ID)
-    print(player2ID)
 
 def startMenu(update,context, userID):
         context.bot.sendMessage(userID,
@@ -391,5 +385,5 @@ def main():
 
 
 if __name__ == '__main__':
-    print(('[Nombre del bot] Start...'))
+    print(('RPS Project starting...'))
     main()

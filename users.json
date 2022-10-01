@@ -5,7 +5,7 @@
             "userName": "Jqnzo",
             "firstName": "Janzo",
             "lastName": "Perez",
-            "message": "Hey there! I'm using RPS Project",
+            "message": "Shine",
             "dateCreation": "2022-09-26 17:42:31.703592",
             "inGame": true
         },
@@ -61,7 +61,7 @@
             "lastName": "Ferrer",
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-29 11:59:10.120102",
-            "inGame": true
+            "inGame": false
         },
         {
             "userID": 1371492547,
@@ -70,7 +70,7 @@
             "lastName": null,
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-29 21:21:19.756350",
-            "inGame": false
+            "inGame": true
         },
         {
             "userID": 5558355090,
@@ -88,6 +88,24 @@
             "lastName": "Povedano Aguilar",
             "message": "Hey there! I'm using RPS Project",
             "dateCreation": "2022-09-30 22:07:00.843679",
+            "inGame": true
+        },
+        {
+            "userID": 5648255146,
+            "userName": null,
+            "firstName": "45752",
+            "lastName": null,
+            "message": "Irondefence",
+            "dateCreation": "2022-10-01 15:11:43.241770",
+            "inGame": true
+        },
+        {
+            "userID": 1779974231,
+            "userName": null,
+            "firstName": "Natacha",
+            "lastName": null,
+            "message": "Hey there! I'm using RPS Project",
+            "dateCreation": "2022-10-01 15:16:28.230145",
             "inGame": true
         }
     ]
