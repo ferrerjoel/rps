@@ -1,112 +1,26 @@
 {
     "userDetails": [
         {
-            "userID": 1045336649,
-            "userName": "Jqnzo",
-            "firstName": "Janzo",
-            "lastName": "Perez",
-            "message": "Shine",
-            "dateCreation": "2022-09-26 17:42:31.703592",
-            "inGame": true
-        },
-        {
-            "userID": 5542382049,
-            "userName": "polrp95",
-            "firstName": "Pol",
-            "lastName": "Renalias",
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-26 17:43:52.651219",
-            "inGame": true
-        },
-        {
             "userID": 5238397723,
             "userName": null,
             "firstName": "Laura",
             "lastName": null,
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-26 17:45:16.281741",
-            "inGame": true
-        },
-        {
-            "userID": 5760035287,
-            "userName": "rguinart",
-            "firstName": "Roger",
-            "lastName": null,
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-26 17:46:41.570475",
-            "inGame": true
+            "message": "women's football supporte",
+            "dateCreation": "2022-10-03 18:51:42.515683",
+            "inGame": false,
+            "available": true,
+            "messageChange": false
         },
         {
             "userID": 216417856,
-            "userName": null,
+            "userName": "joelferrer",
             "firstName": "Joel",
             "lastName": "Ferrer",
-            "message": "Omae wa mou shindeiru",
-            "dateCreation": "2022-09-26 17:55:19.725778",
-            "inGame": false
-        },
-        {
-            "userID": 1983080655,
-            "userName": "Drumpalo",
-            "firstName": "Eduardo",
-            "lastName": "As",
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-26 18:30:22.715044",
-            "inGame": true
-        },
-        {
-            "userID": 12690606,
-            "userName": "isaacferrer",
-            "firstName": "Isaac",
-            "lastName": "Ferrer",
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-29 11:59:10.120102",
-            "inGame": false
-        },
-        {
-            "userID": 1371492547,
-            "userName": null,
-            "firstName": "Josep y Neus",
-            "lastName": null,
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-29 21:21:19.756350",
-            "inGame": true
-        },
-        {
-            "userID": 5558355090,
-            "userName": null,
-            "firstName": "Neus",
-            "lastName": "Riera",
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-30 12:32:56.351012",
-            "inGame": true
-        },
-        {
-            "userID": 5013807990,
-            "userName": null,
-            "firstName": "Irina",
-            "lastName": "Povedano Aguilar",
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-09-30 22:07:00.843679",
-            "inGame": true
-        },
-        {
-            "userID": 5648255146,
-            "userName": null,
-            "firstName": "45752",
-            "lastName": null,
-            "message": "Irondefence",
-            "dateCreation": "2022-10-01 15:11:43.241770",
-            "inGame": true
-        },
-        {
-            "userID": 1779974231,
-            "userName": null,
-            "firstName": "Natacha",
-            "lastName": null,
-            "message": "Hey there! I'm using RPS Project",
-            "dateCreation": "2022-10-01 15:16:28.230145",
-            "inGame": true
+            "message": "Keep calm and do ",
+            "dateCreation": "2022-10-03 18:51:42.732584",
+            "inGame": false,
+            "available": true,
+            "messageChange": false
         }
     ]
 }
