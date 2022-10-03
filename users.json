@@ -1,26 +1,5 @@
 {
     "userDetails": [
-        {
-            "userID": 5238397723,
-            "userName": null,
-            "firstName": "Laura",
-            "lastName": null,
-            "message": "women's football supporte",
-            "dateCreation": "2022-10-03 18:51:42.515683",
-            "inGame": false,
-            "available": true,
-            "messageChange": false
-        },
-        {
-            "userID": 216417856,
-            "userName": "joelferrer",
-            "firstName": "Joel",
-            "lastName": "Ferrer",
-            "message": "Keep calm and do ",
-            "dateCreation": "2022-10-03 18:51:42.732584",
-            "inGame": false,
-            "available": true,
-            "messageChange": false
-        }
+
     ]
 }

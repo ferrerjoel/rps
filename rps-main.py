@@ -40,7 +40,6 @@ Button4 = KeyboardButton(
     text='Help 📖'
 )
 
-
 ButtonRock = KeyboardButton(
     text='🪨'
 )
@@ -61,12 +60,8 @@ def start(update, context):
     writeUserData(update.message.from_user.id, update.message.from_user.username,
                   update.message.from_user.first_name, update.message.from_user.last_name)
 
-    update.message.reply_text(
-        text='Welcome! What do you want to do?',
-        reply_markup=ReplyKeyboardMarkup([
-            [Button1, Button2], [Button3, Button4]
-        ])
-    )
+    startMenu(context, (update.message.chat_id))
+
 # Creates a user on the JSON file
 def writeUserData(userID, userName, firstName, lastName):
     newUserID = {'userID': userID, 'userName': userName, 'firstName': firstName,
@@ -100,7 +95,7 @@ def writeUserData(userID, userName, firstName, lastName):
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 # Returns the userID of a user that is not in a game and that is available
-def getRandomFreeUserObject(currentUserID):
+def getRandomFreeUserObject(context, currentUserID):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -108,9 +103,21 @@ def getRandomFreeUserObject(currentUserID):
             userDetails = [x for x in userDetails if x['inGame'] == False and x['available'] == True]
             if len(userDetails) >= 2:
                 opponentID = currentUserID
-                while opponentID == currentUserID:
+                while len(userDetails) >= 2:
+                    print(currentUserID)
                     opponentID = random.choice(userDetails)['userID']
-                return opponentID
+                    # Sending this message allows us to check if the choosen opponent has blocked the bot or not. The api does not provide a more elegant way of fixing this
+                    try:
+                        if opponentID != currentUserID:
+                            # Message to see if it's blocked
+                            context.bot.send_message(opponentID,
+                                'You are being challenged!', parse_mode=ParseMode.HTML)
+                            return opponentID
+                    except:
+                        for idx, x in enumerate(userDetails):
+                            if x['userID'] == opponentID:
+                                userDetails.pop(idx)
+                        opponentID = currentUserID
             return None
     except OSError as e:
         print(f"Unable to open {USERS_PATH}: {e}")
@@ -135,7 +142,7 @@ def startFriendly(update, context):
     try:
         with open(GAMES_PATH, 'r+') as data:
             fileData = json.load(data)
-            opponentID = getRandomFreeUserObject(userID)
+            opponentID = getRandomFreeUserObject(context, userID)
             if not userIsInGame(userID):
                 if opponentID != None:
                     #if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
@@ -187,14 +194,14 @@ def startGame(userID, opponentID, context):
                 userID, 'You are in a game VS ' + opponent_name + '\n"'+opponent_message+'"')
             context.bot.send_message(
                 opponentID, 'You are in a game VS ' + player_name + '\n"'+player_message+'"')
-            send_movements(userID, context)
-            send_movements(opponentID, context)
+            sendMovements(userID, context)
+            sendMovements(opponentID, context)
     except OSError as e:
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 
 # Asks for the user input on movements
-def send_movements(userID, context):
+def sendMovements(userID, context):
     context.bot.send_message(userID,
                              text='What move do you want to do?',
                              reply_markup=ReplyKeyboardMarkup([
@@ -321,11 +328,11 @@ def resolveRound(update, context):
         # We check if someone has already won
         if player1Rounds >= NUMBER_ROUNDS_WIN or player2Rounds >= NUMBER_ROUNDS_WIN:
             endGame(update, context, player1ID, player2ID)
-            startMenu(update,context, player1ID)
-            startMenu(update,context, player2ID)
+            startMenu(context, player1ID)
+            startMenu(context, player2ID)
         else:
-            send_movements(player1ID, context)
-            send_movements(player2ID, context)
+            sendMovements(player1ID, context)
+            sendMovements(player2ID, context)
 # Ends the game on the JSON file. Moves the data of the game to the 'endedGames' object
 def endGame(update,context,player1ID,player2ID):
     try:
@@ -397,7 +404,7 @@ def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1
         context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
         context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
 # Shows the start menu
-def startMenu(update,context, userID):
+def startMenu(context, userID):
         context.bot.sendMessage(userID,
         text='What do you want to do?',
         reply_markup=ReplyKeyboardMarkup([
@@ -429,15 +436,19 @@ def updateMessage(update, context):
             if x['userID'] == update.message.chat_id:
                 if x['messageChange']:
                     message = update.message.text
+                    if len(message) < 50:
                 # We set the value 'inGame' false for the 2 players
-                    x['message'] = message
-                    x['messageChange'] = False
-        with open(USERS_PATH, 'w') as data:
-            json.dump(fileData, data, indent=4)
+                        x['message'] = message
+                        x['messageChange'] = False
+                        with open(USERS_PATH, 'w') as data:
+                            json.dump(fileData, data, indent=4)
+                        context.bot.send_message(update.message.chat_id, 'Message updated succesfully to: "'+ message + '"', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
+                    else:
+                        context.bot.send_message(update.message.chat_id, "The message can't have more than 50 characters!", parse_mode=ParseMode.HTML, reply_markup = ForceReply())
     except OSError as e:
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
-    context.bot.send_message(update.message.chat_id, 'Message updated succesfully to: "'+ message + '"', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
+    
     start(update, context)
 #Changes the availability value on the user object, this disables the posibility of beig choosen on a random game by another user
 def changeAvailability(update, context):
