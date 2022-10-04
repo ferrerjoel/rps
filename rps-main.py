@@ -100,10 +100,10 @@ def getRandomFreeUserObject(context, currentUserID):
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
             userDetails = fileData['userDetails']
-            userDetails = [x for x in userDetails if x['inGame'] == False and x['available'] == True]
-            if len(userDetails) >= 2:
+            userDetails = [x for x in userDetails if x['inGame'] == False and x['available'] == True and x['userID'] != currentUserID]
+            if len(userDetails) >= 1 :
                 opponentID = currentUserID
-                while len(userDetails) >= 2:
+                while len(userDetails) >= 1:
                     print(currentUserID)
                     opponentID = random.choice(userDetails)['userID']
                     # Sending this message allows us to check if the choosen opponent has blocked the bot or not. The api does not provide a more elegant way of fixing this
