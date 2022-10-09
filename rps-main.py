@@ -437,7 +437,7 @@ def update_message(update, context):
                 if x['messageChange']:
                     message = update.message.text
                     if len(message) < 50:
-                # We set the value 'inGame' false for the 2 players
+                # We set the value 'message' false so we know we have changed the message
                         x['message'] = message
                         x['messageChange'] = False
                         with open(USERS_PATH, 'w') as data:
@@ -448,8 +448,8 @@ def update_message(update, context):
     except OSError as e:
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
-    
-    start(update, context)
+    #If the user gets lost and doesn't know what to do a text message will always prompt the start menu
+    start_menu(context, update.message.chat_id)
 #Changes the availability value on the user object, this disables the posibility of beig choosen on a random game by another user
 def change_availability(update, context):
     try:
