@@ -57,13 +57,13 @@ def start(update, context):
     context.bot.send_message(update.message.chat_id,
                              'Welcome to RPS Project!', parse_mode=ParseMode.HTML)
 
-    writeUserData(update.message.from_user.id, update.message.from_user.username,
+    write_user_data(update.message.from_user.id, update.message.from_user.username,
                   update.message.from_user.first_name, update.message.from_user.last_name)
 
-    startMenu(context, (update.message.chat_id))
+    start_menu(context, (update.message.chat_id))
 
 # Creates a user on the JSON file
-def writeUserData(userID, userName, firstName, lastName):
+def write_user_data(userID, userName, firstName, lastName):
     newUserID = {'userID': userID, 'userName': userName, 'firstName': firstName,
                  'lastName': lastName, 'message' : "Hey there! I'm using RPS Project",'dateCreation': str(datetime.now()), 'inGame': False, 'available' : True, 'messageChange' : False}
     try:
@@ -95,7 +95,7 @@ def writeUserData(userID, userName, firstName, lastName):
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 # Returns the userID of a user that is not in a game and that is available
-def getRandomFreeUserObject(context, currentUserID):
+def get_random_free_user_object(context, currentUserID):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -123,7 +123,7 @@ def getRandomFreeUserObject(context, currentUserID):
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 # Checks if a user is in game
-def userIsInGame(userID):
+def user_is_in_game(userID):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -137,13 +137,13 @@ def userIsInGame(userID):
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 # Starts a game on the JSON file
-def startFriendly(update, context):
+def start_friendly(update, context):
     userID = update.message.from_user.id
     try:
         with open(GAMES_PATH, 'r+') as data:
             fileData = json.load(data)
-            opponentID = getRandomFreeUserObject(context, userID)
-            if not userIsInGame(userID):
+            opponentID = get_random_free_user_object(context, userID)
+            if not user_is_in_game(userID):
                 if opponentID != None:
                     #if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
                     print('Searching an opponent...')
@@ -168,7 +168,7 @@ def startFriendly(update, context):
                         print(f"Unable to open {USERS_PATH}: {e}")
                         return 
                     print(opponentID)
-                    startGame(userID, opponentID, context)
+                    start_game(userID, opponentID, context)
                 else:
                     print('No available players right now')
                     context.bot.send_message(update.message.chat_id, "There aren't any available players right now :(", parse_mode=ParseMode.HTML)
@@ -178,7 +178,7 @@ def startFriendly(update, context):
         print(f"Unable to open {GAMES_PATH}: {e}")
         return 
 # Starts a game and sends the messages to users
-def startGame(userID, opponentID, context):
+def start_game(userID, opponentID, context):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -194,14 +194,14 @@ def startGame(userID, opponentID, context):
                 userID, 'You are in a game VS ' + opponent_name + '\n"'+opponent_message+'"')
             context.bot.send_message(
                 opponentID, 'You are in a game VS ' + player_name + '\n"'+player_message+'"')
-            sendMovements(userID, context)
-            sendMovements(opponentID, context)
+            send_movements(userID, context)
+            send_movements(opponentID, context)
     except OSError as e:
         print(f"Unable to open {USERS_PATH}: {e}")
         return 
 
 # Asks for the user input on movements
-def sendMovements(userID, context):
+def send_movements(userID, context):
     context.bot.send_message(userID,
                              text='What move do you want to do?',
                              reply_markup=ReplyKeyboardMarkup([
@@ -210,34 +210,34 @@ def sendMovements(userID, context):
 # Puts the rock value on the JSON file
 def rock(update, context):
     # We check if the user has already choosen
-    if not checkPlayerTurn(update, context):
+    if not check_player_turn(update, context):
         context.bot.send_message(
             update.message.chat_id, 'You have choosen rock! 🪨', parse_mode=ParseMode.HTML)
         # Sets the move on the JSON file
-        setMove(update, context, 1)
+        set_move(update, context, 1)
     else: 
         context.bot.send_message(
             update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
 # Puts the paper value on the JSON file
 def paper(update, context):
-    if not checkPlayerTurn(update, context):
+    if not check_player_turn(update, context):
         context.bot.send_message(
             update.message.chat_id, 'You have choosen paper! 📋', parse_mode=ParseMode.HTML)
-        setMove(update, context, 2)
+        set_move(update, context, 2)
     else: 
         context.bot.send_message(
             update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
 # Puts the scissors value on the JSON file
 def scissors(update, context):
-    if not checkPlayerTurn(update, context):
+    if not check_player_turn(update, context):
         context.bot.send_message(
             update.message.chat_id, 'You have choosen scissors! ✂️', parse_mode=ParseMode.HTML)
-        setMove(update, context, 3)
+        set_move(update, context, 3)
     else: 
         context.bot.send_message(
             update.message.chat_id, 'You have already made your move!', parse_mode=ParseMode.HTML)
 # returns True if the player has already choosen
-def checkPlayerTurn (update, context):
+def check_player_turn (update, context):
     chatID = update.message.chat_id
     try:
         with open(GAMES_PATH, 'r+') as data:
@@ -253,7 +253,7 @@ def checkPlayerTurn (update, context):
         print(f"Unable to open {GAMES_PATH}: {e}")
         return 
 #Recives the user movement and sets the move on the JSON file
-def setMove(update, context, move):
+def set_move(update, context, move):
     chatID = update.message.chat_id
     try:
         with open(GAMES_PATH, 'r+') as data:
@@ -266,12 +266,12 @@ def setMove(update, context, move):
                     x['player2Movement'] = move
         with open(GAMES_PATH, 'w') as data:
             json.dump(fileData, data, indent=4)
-        resolveRound(update, context)
+        resolve_round(update, context)
     except OSError as e:
         print(f"Unable to open {GAMES_PATH}: {e}")
         return 
 # Restarts the movements of both players and adds (if necessary) a win to the winner
-def newRound(update, context, winner):
+def new_round(update, context, winner):
     chatID = update.message.chat_id
     try:
         with open(GAMES_PATH, 'r+') as data:
@@ -291,7 +291,7 @@ def newRound(update, context, winner):
         print(f"Unable to open {GAMES_PATH}: {e}")
         return 
 # Takes the data of the game, if both players have made movements it chooses the winner
-def resolveRound(update, context):
+def resolve_round(update, context):
     try:
         with open(GAMES_PATH, 'r+') as data:
             chatID = update.message.chat_id
@@ -323,18 +323,18 @@ def resolveRound(update, context):
         else:
             veredict = 3
         # We inform the players
-        resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1Movement, player2Movement, player1Rounds, player2Rounds)
-        newRound(update, context, veredict)
+        resolve_round_message(update, context, veredict, player1ID, player2ID, player1Movement, player2Movement, player1Rounds, player2Rounds)
+        new_round(update, context, veredict)
         # We check if someone has already won
         if player1Rounds >= NUMBER_ROUNDS_WIN or player2Rounds >= NUMBER_ROUNDS_WIN:
-            endGame(update, context, player1ID, player2ID)
-            startMenu(context, player1ID)
-            startMenu(context, player2ID)
+            end_game(update, context, player1ID, player2ID)
+            start_menu(context, player1ID)
+            start_menu(context, player2ID)
         else:
-            sendMovements(player1ID, context)
-            sendMovements(player2ID, context)
+            send_movements(player1ID, context)
+            send_movements(player2ID, context)
 # Ends the game on the JSON file. Moves the data of the game to the 'endedGames' object
-def endGame(update,context,player1ID,player2ID):
+def end_game(update,context,player1ID,player2ID):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -363,7 +363,7 @@ def endGame(update,context,player1ID,player2ID):
         return 
 
 #Sends the resolution of the rount to both players
-def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1Movement, player2Movement, player1Rounds, player2Rounds):
+def resolve_round_message(update, context, veredict, player1ID, player2ID, player1Movement, player2Movement, player1Rounds, player2Rounds):
     if player1Movement == 1:
         resultPlayer2 = '🪨 VS '
         resultPlayer1 = ' VS 🪨'
@@ -404,7 +404,7 @@ def resolveRoundMessage(update, context, veredict, player1ID, player2ID, player1
         context.bot.send_message(player2ID, 'You have won this game!', parse_mode=ParseMode.HTML)
         context.bot.send_message(player1ID, 'You have lost this game... :(', parse_mode=ParseMode.HTML)
 # Shows the start menu
-def startMenu(context, userID):
+def start_menu(context, userID):
         context.bot.sendMessage(userID,
         text='What do you want to do?',
         reply_markup=ReplyKeyboardMarkup([
@@ -412,7 +412,7 @@ def startMenu(context, userID):
         ])
     )
 # Changes the value of the user that allows to change the ussername
-def changeMessage(update, context):
+def change_message(update, context):
     context.bot.send_message(update.message.chat_id, 'What message do you want?', parse_mode=ParseMode.HTML, reply_markup = ForceReply())
     try:
         with open(USERS_PATH, 'r+') as data:
@@ -428,7 +428,7 @@ def changeMessage(update, context):
         return
 # Changes the current user message
 # We can't use a variable to know if the user wants to change the message, since a variable value is shared with all online users and it can generate problems
-def updateMessage(update, context):
+def update_message(update, context):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -451,7 +451,7 @@ def updateMessage(update, context):
     
     start(update, context)
 #Changes the availability value on the user object, this disables the posibility of beig choosen on a random game by another user
-def changeAvailability(update, context):
+def change_availability(update, context):
     try:
         with open(USERS_PATH, 'r+') as data:
             fileData = json.load(data)
@@ -482,15 +482,15 @@ def main():
     # Eventos que activarán nuestro bot.
     # /comandos
     dp.add_handler(CommandHandler('start',    start))
-    dp.add_handler(CommandHandler('game',    startFriendly))
-    dp.add_handler(CommandHandler('message',    changeMessage))
+    dp.add_handler(CommandHandler('game',    start_friendly))
+    dp.add_handler(CommandHandler('message',    change_message))
     
     dp.add_handler(CommandHandler('rock',    rock))
     dp.add_handler(CommandHandler('paper',    paper))
     dp.add_handler(CommandHandler('scissors',    scissors))
     dp.add_handler(CommandHandler('help',    help))
-    dp.add_handler(CommandHandler('availability',    changeAvailability))
-    dp.add_handler(MessageHandler(Filters.text, commandTranslator))
+    dp.add_handler(CommandHandler('availability',    change_availability))
+    dp.add_handler(MessageHandler(Filters.text, command_translator))
 
     dp.add_error_handler(error_callback)
     # Comienza el bot
@@ -499,7 +499,7 @@ def main():
     updater.idle()
 # Reads every text that the user sends and if one matches a command it executes
 # This way we can use buttons that doesn't has a "/command"
-def commandTranslator(update,context):
+def command_translator(update,context):
     input = update.message.text
     if input == '🪨':
         rock(update, context)
@@ -508,17 +508,17 @@ def commandTranslator(update,context):
     elif input == '✂️':
         scissors(update, context)
     elif input == 'Start game 🪨📋✂️':
-        startFriendly(update, context)
+        start_friendly(update, context)
     elif input == 'Start':
         start(update, context)
     elif input == 'Change availability 📅':
-        changeAvailability(update, context)
+        change_availability(update, context)
     elif input == 'Change message 🎫':
-        changeMessage(update, context)
+        change_message(update, context)
     elif input == 'Help 📖':
         help(update, context)
     else:
-        updateMessage(update, context)
+        update_message(update, context)
 
 if __name__ == '__main__':
     print(('RPS Project starting...'))
