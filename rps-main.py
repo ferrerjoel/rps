@@ -104,7 +104,6 @@ def get_random_free_user_object(context, currentUserID):
             if len(userDetails) >= 1 :
                 opponentID = currentUserID
                 while len(userDetails) >= 1:
-                    print(currentUserID)
                     opponentID = random.choice(userDetails)['userID']
                     # Sending this message allows us to check if the choosen opponent has blocked the bot or not. The api does not provide a more elegant way of fixing this
                     try:
@@ -146,7 +145,7 @@ def start_friendly(update, context):
             if not user_is_in_game(userID):
                 if opponentID != None:
                     #if not any(userDetails['userID'] == opponentID for userDetails in fileData['games']):
-                    print('Searching an opponent...')
+                    print('¡Game created! ' + str(userID) + ' VS ' + str(opponentID))
                     # Player turn: 1 = Player 1 / 2 = Player 2 / 3 = Game ended
                     # Winner: 0 = game active / 1 = P1 / 2 = P2
                     newGame = {'player1ID': userID, 'player2ID': opponentID, 'gameStarted': str(datetime.now(
@@ -167,10 +166,9 @@ def start_friendly(update, context):
                     except OSError as e:
                         print(f"Unable to open {USERS_PATH}: {e}")
                         return 
-                    print(opponentID)
                     start_game(userID, opponentID, context)
                 else:
-                    print('No available players right now')
+                    print('No available players right now ' + str(userID))
                     context.bot.send_message(update.message.chat_id, "There aren't any available players right now :(", parse_mode=ParseMode.HTML)
             else:
                 context.bot.send_message(update.message.chat_id, "You are already in a game!", parse_mode=ParseMode.HTML)
